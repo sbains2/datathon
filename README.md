@@ -3,10 +3,24 @@
 
 The goal of our project this weekend was to analyze the effect of COVID-19 on inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border. We wanted to analyze the efficiency and volume of traffic at each entry port, looking for various factors affecting long wait times. Additionally, we wanted to provide a solution for our peers and fellow travelers to efficiently plan vacations across the border without dealing with unforeseen wait times. 
 
-Initially to understand the data we conducted a descriptive analysis of our dataset after splitting it into two categories: Mexican borders and Canadian borders. This helped us narrow down each port and understand their traffic movements for their respective regions. Another factor we decided to include in our analysis is seasonal weather. We classified each month as a fall, spring, summer, or winter month. This showed us that from spring to the fall seasons the Canadian border has the most inbound traffic while, the Mexico border has constant high-volume traffic throughout every season. (Refer to visualization below 1.1). This could mean that the Mexican border consistently encounters high volumes of traffic causing longer wait times. Surprisingly enough Canada experienced an all-time low during the COVID-19 pandemic, but Mexico still encountered consistent inbound traffic.
+Initially to understand the data we conducted a descriptive analysis of our dataset after splitting it into two categories: Mexican borders and Canadian borders. This helped us narrow down each port and understand their traffic movements for their respective regions. Another factor we decided to include in our analysis is seasonal weather. We classified each month as a fall, spring, summer, or winter month. This showed us that during the summer and fall seasons, the Canadian border has the most inbound traffic while the Mexico border has constant high-volume traffic throughout every season. (Refer to visualization below 1.1). 
+
+When comparing pre and post-Covid-19 inbound traffic volume, we noticed
+
+### 2017-2019
+<img width="593" alt="Screenshot 2024-05-19 at 11 06 39 AM" src="https://github.com/sbains2/datathon/assets/67097552/19542969-8c0d-4a15-b2ec-d526feddbedf">
+
+### 2020-2021
+<img width="399" alt="Screenshot 2024-05-19 at 11 07 13 AM" src="https://github.com/sbains2/datathon/assets/67097552/babc0663-9121-4fd2-8f2a-7d437b49f0dd">
+
+### 2022-2024
+<img width="599" alt="Screenshot 2024-05-19 at 11 08 01 AM" src="https://github.com/sbains2/datathon/assets/67097552/81f926db-76aa-4b0b-aed2-3a24b0028ac4">
 
 
-          <Viz 1.1>
+
+<img width="567" alt="Screenshot 2024-05-19 at 10 58 07 AM" src="https://github.com/sbains2/datathon/assets/67097552/a21dfb10-400a-4c10-b267-193af51c6223">
+
+
 
 After noticing such a discrepancy, we still were curious about the highly consistent trends of inbound traffic so we decided to further break down our two data of inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border into 3 new categories:
 1. Distribution of inbound traffic for each port per year
@@ -22,7 +36,8 @@ After noticing such a discrepancy, we still were curious about the highly consis
    
 ## Data Metrics (Data Analysis)
 
-To create an accurate measurement of the traffic at each port at the borders, we decided to normalize the data points and compute an aggregated score, ranking each port based on the busiest port. To do so we created the following metric that encompassed the majority of the factors affecting border wait times.
+To create an accurate measurement of the traffic at each port at the borders, we decided to norma<img width="1106" alt="Screenshot 2024-05-19 at 10 15 36 AM" src="https://github.com/sbains2/datathon/assets/67097552/e4d3ddd2-2df2-4204-b7e4-33cffbeab4f9">
+lize the data points and compute an aggregated score, ranking each port based on the busiest port. To do so we created the following metric that encompassed the majority of the factors affecting border wait times.
 
 Step 1: We normalized each measure on a scale of 0-1 by dividing by the maximum value of that value across all ports. 
 
