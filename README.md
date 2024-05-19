@@ -1,4 +1,3 @@
-# datathon
 # Government: Analyzing and Predicting Inbound Crossings the U.S.-Canada and the U.S.-Mexico border
 
 The goal of our project this weekend was to analyze the effect of COVID-19 on inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border. We wanted to analyze the efficiency and volume of traffic at each entry port, looking for various factors affecting long wait times. Additionally, we wanted to provide a solution for our peers and fellow travelers to efficiently plan vacations across the border without dealing with unforeseen wait times. 
@@ -105,4 +104,5 @@ With the new composite metric having such an effect on the prediction values, we
   Link to map: https://public.tableau.com/app/profile/sahil.bains/viz/MeasuringDensityAmongTop20RankedBusiestBorderCrossings/Sheet2
   
 
+## ML Model (Border Port location recommendation)
 
