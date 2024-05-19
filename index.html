@@ -394,27 +394,10 @@ function generateChart(portName, portRank, portDensity) {
                 y: {
                     beginAtZero: true
                 }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            var label = context.dataset.label || '';
-
-                            if (context.datasetIndex === 1) { // For Port Density dataset
-                                label += ': ' + context.parsed.y.toFixed(5); // Display density with 5 decimal places
-                            } else {
-                                label += ': ' + context.parsed.y;
-                            }
-                            return label;
-                        }
-                    }
-                }
             }
         }
     });
 }
-
 </script>
 </body>
 </html>
