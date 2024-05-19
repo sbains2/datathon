@@ -9,7 +9,7 @@ When comparing pre and post-Covid-19 inbound traffic volume, we noticed
 
 
 <p align="center">
-   <img width="593" alt="Screenshot 2024-05-19 at 11 06 39 AM" src="https://github.com/sbains2/datathon/assets/67097552/19542969-8c0d-4a15-b2ec-   d526feddbedf" title="2017-2018">
+   <img width="593" alt="Screenshot 2024-05-19 at 11 06 39 AM" src="https://github.com/sbains2/datathon/assets/67097552/19542969-8c0d-4a15-b2ec-   d526feddbedf">
    <img width="399" alt="Screenshot 2024-05-19 at 11 07 13 AM" src="https://github.com/sbains2/datathon/assets/67097552/babc0663-9121-4fd2-8f2a-7d437b49f0dd">
    <img width="599" alt="Screenshot 2024-05-19 at 11 08 01 AM" src="https://github.com/sbains2/datathon/assets/67097552/81f926db-76aa-4b0b-aed2-3a24b0028ac4">
 </p>
