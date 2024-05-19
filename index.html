@@ -79,8 +79,6 @@
     <input type="text" id="start-location" placeholder="Click on map to select start location" readonly>
     <label for="end-location">End Location:</label>
     <input type="text" id="end-location" placeholder="Click on map to select end location" readonly>
-    <label for="travel-date">Travel Date:</label>
-    <input type="date" id="travel-date">
     <label for="transport-method">Method of Transportation:</label>
     <select id="transport-method">
         <option value="Personal Vehicles">Personal Vehicles</option>
@@ -188,10 +186,8 @@
 
     document.getElementById('searchButton').addEventListener('click', function () {
     console.log('Search button clicked');
-    var travelDate = document.getElementById('travel-date').value;
     console.log('Start Location:', startLocation);
     console.log('End Location:', endLocation);
-    console.log('Travel Date:', travelDate);
     fetch('port_rank.geojson')
         .then(response => response.json())
         .then(data => {
@@ -203,7 +199,7 @@
 
 function findBestPort(data) {
     console.log('Finding best port...');
-    console.log('Received data:', data); // Log the received data
+    console.log('Received data:', data);
 
     try {
         // Validate data format
@@ -212,9 +208,13 @@ function findBestPort(data) {
         }
 
         var ports = data.features;
-        var R = 160.934; // 100 miles in kilometers
+        var R = 1600.934; // 100 miles in kilometers
         var bestPort = null;
-        var bestRank = Infinity;
+        var bestScore = -Infinity;
+        var selectedMeasure = document.getElementById('transport-method').value;
+
+        // Filter ports based on the selected measure
+        ports = ports.filter(port => port.properties.Measure === selectedMeasure);
 
         ports.forEach(port => {
             // Access port properties and geometry
@@ -229,6 +229,7 @@ function findBestPort(data) {
             var portLat = portCoordinates[1];
             var portLng = portCoordinates[0];
             var portRank = parseFloat(portProperties["Rank"]);
+            var portDensity = parseFloat(portProperties["Density"]);
 
             var dLat = (portLat - endLocation.lat) * Math.PI / 180;
             var dLng = (portLng - endLocation.lng) * Math.PI / 180;
@@ -238,8 +239,11 @@ function findBestPort(data) {
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             var distance = 6371 * c;
 
-            if (distance <= R && portRank < bestRank) {
-                bestRank = portRank;
+            // Calculate a score based on distance, rank, and density
+            var score = 1 / distance + 1 / portRank + portDensity;
+
+            if (distance <= R && score > bestScore) {
+                bestScore = score;
                 bestPort = port;
             }
         });
@@ -247,15 +251,68 @@ function findBestPort(data) {
         if (bestPort) {
             var bestPortName = bestPort.properties["Port Name"];
             var bestPortCoordinates = bestPort.geometry.coordinates;
-            generateChart([bestPortName], [bestPort.properties["Rank"]]);
-            zoomToPort(bestPortCoordinates, bestPortName);
+            var bestPortRank = bestPort.properties["Rank"];
+            var bestPortDensity = bestPort.properties["Density"];
+
+            // Calculate midpoint
+            var midLat = (startLocation.lat + endLocation.lat) / 2;
+            var midLng = (startLocation.lng + endLocation.lng) / 2;
+
+            // Calculate bearing
+            var bearing = (Math.atan2(endLocation.lng - startLocation.lng, endLocation.lat - startLocation.lat) * 180 / Math.PI + 360) % 360;
+
+            // Calculate distance from start for green dot
+            var greenDotDistance = 0.5; // Adjust this value for positioning
+            var greenDotLat = midLat + greenDotDistance * Math.cos(bearing * Math.PI / 180);
+            var greenDotLng = midLng + greenDotDistance * Math.sin(bearing * Math.PI / 180);
+
+            // Find closest border point
+            var closestBorderPoint = findClosestBorderPoint(greenDotLat, greenDotLng, data.features);
+
+            if (closestBorderPoint) {
+                generateChart(bestPortName, bestPortRank, bestPortDensity);
+                zoomToPort(closestBorderPoint.geometry.coordinates, bestPortName);
+            } else {
+                console.log('No border point found within the data.');
+            }
         } else {
-            console.log('No port found within 100 miles radius.');
+            console.log('No port found within 100 miles radius for the selected measure.');
         }
     } catch (error) {
         console.error('Error in findBestPort:', error);
     }
 }
+
+function findClosestBorderPoint(lat, lng, features) {
+    var closestPoint = null;
+    var minDistance = Infinity;
+
+    features.forEach(feature => {
+        var coordinates = feature.geometry.coordinates;
+        var distance = getDistance(lat, lng, coordinates[1], coordinates[0]); // Swap lat and lng
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestPoint = feature;
+        }
+    });
+
+    return closestPoint;
+}
+
+function getDistance(lat1, lng1, lat2, lng2) {
+    var R = 6371; // Radius of the Earth in kilometers
+    var dLat = (lat2 - lat1) * Math.PI / 180;
+    var dLng = (lng2 - lng1) * Math.PI / 180;
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var distance = R * c;
+
+    return distance;
+}
+
 
 var portMarker = null;
 
@@ -305,33 +362,42 @@ document.getElementById('clearButton').addEventListener('click', function () {
 
 
 
-    function generateChart(labels, values) {
-        if (chartInstance) {
-            chartInstance.destroy();
-        }
+function generateChart(portName, portRank, portDensity) {
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
 
-        var ctx = document.getElementById('chart').getContext('2d');
-        chartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Best Port Rank',
-                    data: values,
+    var ctx = document.getElementById('chart').getContext('2d');
+    chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [portName],
+            datasets: [
+                {
+                    label: 'Port Rank',
+                    data: [portRank],
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                },
+                {
+                    label: 'Port Density',
+                    data: [portDensity],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
-    }
+        }
+    });
+}
 </script>
 </body>
 </html>
