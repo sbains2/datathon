@@ -5,8 +5,6 @@ The goal of our project this weekend was to analyze the effect of COVID-19 on in
 
 Initially to understand the data we conducted a descriptive analysis of our dataset after splitting it into two categories: Mexican borders and Canadian borders. This helped us narrow down each port and understand their traffic movements for their respective regions. Another factor we decided to include in our analysis is seasonal weather. We classified each month as a fall, spring, summer, or winter month. This showed us that during the summer and fall seasons, the Canadian border has the most inbound traffic while the Mexico border has constant high-volume traffic throughout every season. (Refer to visualization below 1.1). 
 
-When comparing pre and post-Covid-19 inbound traffic volume, we noticed
-
 
 <p align="center">
    <img width="300" alt="Screenshot 2024-05-19 at 11 14 39 AM" src="https://github.com/sbains2/datathon/assets/67097552/e457614a-1e14-4a75-8e99-9b0a0eee1484">
@@ -14,7 +12,18 @@ When comparing pre and post-Covid-19 inbound traffic volume, we noticed
    <img width="300" alt="Screenshot 2024-05-19 at 11 08 01 AM" src="https://github.com/sbains2/datathon/assets/67097552/81f926db-76aa-4b0b-aed2-3a24b0028ac4">
 </p>
 
+**Mexican Border:** 
+- 2017-2019: The median inbound traffic is around 1,917,000 with a spread ranging from approximately 1,442,000 to 2,470,000. There are outliers on both the higher and lower ends, suggesting occasional spikes and dips in traffic volume.
+- 2020-2021: The median inbound traffic is around 1,621,000 with a spread ranging from approximately 1,315,000 to 1,917,000. The spread and the median have both decreased compared to the previous period, suggesting a more inconsistent flow of traffic. There are outliers on both ends, but less frequent than in the first period.
+- 2022-2024: The median inbound traffic is around 1,827,000 with a spread ranging from approximately 1,500,000 to 2,144,000. The spread and median show some recovery compared to the Covid period but haven't reached the levels seen in 2017-2019. There are outliers on both ends, similar to the first period. Even if the same levels were reached, our data did not reflect such.
 
+  
+**Canadian Border:**
+- 2017-2019: The median inbound traffic is around 1,389,000 with a spread ranging from approximately 1,019,000 to 1,979,000. The spread is smaller than the Canadian Border, indicating a tighter distribution of traffic volume. There are also fewer outliers compared to the Canadian Border.
+- 2020-2021: The median inbound traffic is around 1,387,000 with a spread ranging from approximately 1,064,000 to 1,709,000. Similar to the Mexican Border, the spread and median decreased, indicating a more inconsistent traffic flow. There are outliers on both ends, but less frequent than in the first period.
+- 2022-2024: The median inbound traffic is around 1,562,000 with a spread ranging from approximately 1,209,000 to 1,970,000. Similar to the Mexican Border, the spread and median show some recovery but haven't reached pre-Covid levels. There are outliers on both ends, but less frequent than in the first period. Even if the same levels were reached, our data did not reflect such.
+
+In summary, analyzing inbound traffic between the Canadian and Mexican Borders across three periods (2017-2019, 2020-2021, 2022-2024) reveals a pattern potentially linked to the Covid-19 pandemic. The spread of traffic volume, indicating seasonal variations, was significantly wider for the Mexican Border across all periods (Mexican Border spread: 1,028,000 vs. Canadian Border spread: 960,000 in 2017-2019). Notably, both borders experienced a tightening of this spread during the Covid period (2020-2021), with medians around 1,621,000 (Mexico) and 1,387,000 (Canada), suggesting a more consistent flow of traffic likely due to travel restrictions. While the most recent period (2022-2024) shows some recovery in spread and medians, they haven't reached pre-pandemic levels, indicating lingering effects or a new normal for border traffic.
 
 After noticing such a discrepancy, we still were curious about the highly consistent trends of inbound traffic so we decided to further break down our two data of inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border into 3 new categories:
 1. Distribution of inbound traffic for each port per year
