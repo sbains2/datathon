@@ -3,6 +3,7 @@
 The goal of our project this weekend was to analyze the effect of COVID-19 on inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border. We wanted to analyze the efficiency and volume of traffic at each entry port, looking for various factors affecting long wait times. Additionally, we wanted to provide a solution for our peers and fellow travelers to efficiently plan vacations across the border without dealing with unforeseen wait times. 
 
 Initially to understand the data we conducted a descriptive analysis of our dataset after splitting it into two categories: Mexican borders and Canadian borders. This helped us narrow down each port and understand their traffic movements for their respective regions. Another factor we decided to include in our analysis is seasonal weather. We classified each month as a fall, spring, summer, or winter month. This showed us that during the summer and fall seasons, the Canadian border has the most inbound traffic while the Mexico border has constant high-volume traffic throughout every season. 
+<br><br>
 _**Link to boxplot graph:**_ https://public.tableau.com/app/profile/anirit.bansal/viz/BorderTraffic/Sheet3
 
 <p align="center">
