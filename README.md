@@ -40,8 +40,7 @@ After noticing such a discrepancy, we still were curious about the highly consis
    
 ## Data Metrics (Data Analysis)
 
-To create an accurate measurement of the traffic at each port at the borders, we decided to norma<img width="1106" alt="Screenshot 2024-05-19 at 10 15 36 AM" src="https://github.com/sbains2/datathon/assets/67097552/e4d3ddd2-2df2-4204-b7e4-33cffbeab4f9">
-lize the data points and compute an aggregated score, ranking each port based on the busiest port. To do so we created the following metric that encompassed the majority of the factors affecting border wait times.
+To create an accurate measurement of the traffic at each port at the borders, we decided to normalize the data points and compute an aggregated score, ranking each port based on the busiest port. To do so we created the following metric that encompassed the majority of the factors affecting border wait times.
 
 Step 1: We normalized each measure on a scale of 0-1 by dividing by the maximum value of that value across all ports. 
 
@@ -52,6 +51,7 @@ Step 1: We normalized each measure on a scale of 0-1 by dividing by the maximum 
               measure_traffic_pivot[measure] = measure_traffic_pivot[measure] / measure_traffic_pivot[measure].max()
 
 Step 2: We decided to assign a weight to each normalized measure. We assigned the weights based on the time taken to cross the border.
+Note: These weights were assumptions made by us factoring time taken to cross the border by each group shown below.
 
           weights = {
               'Bus Passengers': 0.1,	
@@ -87,7 +87,8 @@ Step 4: Now that the composite metric has been created, all we had to do was ran
 ### Outcome:
 This metric not only helped us understand the busiest ports during a certain time of the year but also helped us create a machine-learning model recommendation system, providing individuals entering the US with optimized information regarding which is the best port to use based on the date of travel. Our algorithm created above to compute the composite metric showed to have an 85% feature importance on predicting recommended ports for users.
 
-<img width="886" alt="Screenshot 2024-05-19 at 9 36 11 AM" src="https://github.com/sbains2/datathon/assets/67097552/c79f0cea-5189-4d49-adc6-a1ef7bbafde2">
+<img width="527" alt="Screenshot 2024-05-19 at 11 47 33 AM" src="https://github.com/sbains2/datathon/assets/67097552/3f37f56e-500e-42b7-a802-a84908a8920b">
+
 
 With the new composite metric having such an effect on the prediction values, we decided to rank each port from most busiest to least, using composite metric. We were able to implement this ranking system on our map visualization showing the top 20 locations that are the busiest that are recommended to avoid. While this may not seem like much, from this composite score we can infer:
 - Ports with higher ranks might need to allocate more resources, infrastructure, and staffing to handle high traffic.
