@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Port Travel Planner</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet">
+    <style>
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+        }
+
+        #dashboard {
+            position: absolute;
+            top: 50px;
+            bottom: 25%;
+            right: 0;
+            width: 30%;
+            background-color: #000000;
+            opacity: 0.79;
+            overflow: auto;
+            padding: 20px;
+            border: 2px solid black;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            margin: 0;
+            z-index: 1;
+            color: white;
+        }
+
+        #toggleDashboard {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            z-index: 1000;
+            cursor: pointer;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .button {
+            margin-bottom: 10px;
+            cursor: pointer;
+            background-color: #ccc;
+            border: 1px solid #666;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 50%;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<div id="dashboard">
+    <h2>Port Travel Planner</h2>
+    <label for="start-location">Start Location:</label>
+    <input type="text" id="start-location" placeholder="Click on map to select start location" readonly>
+    <label for="end-location">End Location:</label>
+    <input type="text" id="end-location" placeholder="Click on map to select end location" readonly>
+    <label for="travel-date">Travel Date:</label>
+    <input type="date" id="travel-date">
+    <label for="transport-method">Method of Transportation:</label>
+    <select id="transport-method">
+        <option value="Personal Vehicles">Personal Vehicles</option>
+        <option value="Trucks">Trucks</option>
+        <option value="Buses">Buses</option>
+        <option value="Pedestrians">Pedestrians</option>
+    </select>
+    <button type="button" id="searchButton">Search</button>
+    <button type="button" id="clearButton">Clear</button>
+    <canvas id="chart"></canvas>
+</div>
+<div id="toggleDashboard">Toggle Dashboard</div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2JhaW5zMiIsImEiOiJjbGpoamZhYmMwaXUzM2xxZ2dqaGM5eGJrIn0.w__oL-gnTQ1h2AZMkAX2iQ';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/dark-v10',
+        center: [-98.35, 39.50],
+        zoom: 3
+    });
+
+    var dashboardVisible = true;
+    document.getElementById('toggleDashboard').addEventListener('click', function () {
+        dashboardVisible = !dashboardVisible;
+        document.getElementById('dashboard').style.display = dashboardVisible ? 'block' : 'none';
+    });
+
+    var chartInstance = null;
+    var startLocation = null;
+    var endLocation = null;
+    var startMarker = null;
+    var endMarker = null;
+
+    map.on('load', function () {
+    fetch('port_rank.geojson')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data loaded:', data);
+            // Add source and layer here
+            map.addSource('ports', {
+                type: 'geojson',
+                data: data // Assuming port_rank.json contains GeoJSON data
+            });
+
+            map.addLayer({
+                id: 'ports',
+                type: 'circle',
+                source: 'ports',
+                paint: {
+                    'circle-color': '#ff0000',
+                    'circle-radius': 5
+                }
+            });
+        })
+        .catch(error => console.error('Error loading data:', error));
+});
+
+
+    map.on('click', function (e) {
+    console.log('Map clicked');
+    if (!startLocation) {
+        startLocation = e.lngLat;
+        document.getElementById('start-location').value = `Lat: ${startLocation.lat.toFixed(4)}, Lng: ${startLocation.lng.toFixed(4)}`;
+        startMarker = new mapboxgl.Marker({ color: 'blue' }).setLngLat(startLocation).addTo(map);
+    } else if (!endLocation) {
+        endLocation = e.lngLat;
+        document.getElementById('end-location').value = `Lat: ${endLocation.lat.toFixed(4)}, Lng: ${endLocation.lng.toFixed(4)}`;
+        endMarker = new mapboxgl.Marker({ color: 'red' }).setLngLat(endLocation).addTo(map);
+        calculateDistance();
+    }
+});
+
+    function calculateDistance() {
+        var R = 6371; // Radius of the Earth in kilometers
+        var dLat = (endLocation.lat - startLocation.lat) * Math.PI / 180;
+        var dLng = (endLocation.lng - startLocation.lng) * Math.PI / 180;
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(startLocation.lat * Math.PI / 180) * Math.cos(endLocation.lat * Math.PI / 180) *
+                Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var distance = R * c;
+
+        console.log('Distance:', distance.toFixed(2), 'km');
+    }
+
+    document.getElementById('clearButton').addEventListener('click', function () {
+        if (startMarker) {
+            startMarker.remove();
+            startMarker = null;
+        }
+        if (endMarker) {
+            endMarker.remove();
+            endMarker = null;
+        }
+        startLocation = null;
+        endLocation = null;
+        document.getElementById('start-location').value = '';
+        document.getElementById('end-location').value = '';
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+        console.log('Clear button clicked');
+    });
+
+    document.getElementById('searchButton').addEventListener('click', function () {
+    console.log('Search button clicked');
+    var travelDate = document.getElementById('travel-date').value;
+    console.log('Start Location:', startLocation);
+    console.log('End Location:', endLocation);
+    console.log('Travel Date:', travelDate);
+    fetch('port_rank.geojson')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data fetched:', data);
+            findBestPort(data);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+});
+
+function findBestPort(data) {
+    console.log('Finding best port...');
+    console.log('Received data:', data); // Log the received data
+
+    try {
+        // Validate data format
+        if (!data || typeof data !== 'object' || !Array.isArray(data.features)) {
+            throw new Error('Invalid data format');
+        }
+
+        var ports = data.features;
+        var R = 160.934; // 100 miles in kilometers
+        var bestPort = null;
+        var bestRank = Infinity;
+
+        ports.forEach(port => {
+            // Access port properties and geometry
+            var portCoordinates = port.geometry.coordinates;
+            var portProperties = port.properties;
+
+            // Validate coordinates and properties
+            if (!portCoordinates || portCoordinates.length < 2 || !portProperties) {
+                return;
+            }
+
+            var portLat = portCoordinates[1];
+            var portLng = portCoordinates[0];
+            var portRank = parseFloat(portProperties["Rank"]);
+
+            var dLat = (portLat - endLocation.lat) * Math.PI / 180;
+            var dLng = (portLng - endLocation.lng) * Math.PI / 180;
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(endLocation.lat * Math.PI / 180) * Math.cos(portLat * Math.PI / 180) *
+                    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var distance = 6371 * c;
+
+            if (distance <= R && portRank < bestRank) {
+                bestRank = portRank;
+                bestPort = port;
+            }
+        });
+
+        if (bestPort) {
+            var bestPortName = bestPort.properties["Port Name"];
+            var bestPortCoordinates = bestPort.geometry.coordinates;
+            generateChart([bestPortName], [bestPort.properties["Rank"]]);
+            zoomToPort(bestPortCoordinates, bestPortName);
+        } else {
+            console.log('No port found within 100 miles radius.');
+        }
+    } catch (error) {
+        console.error('Error in findBestPort:', error);
+    }
+}
+
+var portMarker = null;
+
+function zoomToPort(coordinates, portName) {
+    var zoom = map.getZoom();
+    map.flyTo({
+        center: coordinates,
+        zoom: zoom + 2, // Adjust this value to control the zoom level
+        essential: true // This animation is considered essential with respect to prefers-reduced-motion
+    });
+
+    // Remove existing port marker if any
+    if (portMarker) {
+        portMarker.remove();
+    }
+
+    // Add a marker for the best port
+    portMarker = new mapboxgl.Marker({ color: 'green' })
+        .setLngLat(coordinates)
+        .setPopup(new mapboxgl.Popup().setHTML(`<h3>${portName}</h3>`))
+        .addTo(map);
+}
+
+document.getElementById('clearButton').addEventListener('click', function () {
+    if (startMarker) {
+        startMarker.remove();
+        startMarker = null;
+    }
+    if (endMarker) {
+        endMarker.remove();
+        endMarker = null;
+    }
+    if (portMarker) {
+        portMarker.remove();
+        portMarker = null;
+    }
+    startLocation = null;
+    endLocation = null;
+    document.getElementById('start-location').value = '';
+    document.getElementById('end-location').value = '';
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+    console.log('Clear button clicked');
+});
+
+
+
+
+    function generateChart(labels, values) {
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        var ctx = document.getElementById('chart').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Best Port Rank',
+                    data: values,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

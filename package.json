@@ -1,0 +1,25 @@
+{
+  "name": "datathon",
+  "version": "1.0.0",
+  "description": "The goal of our project this weekend was to analyze the effect of COVID-19 on inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border. We wanted to analyze the efficiency and volume of traffic at each entry port, looking for various factors affecting long wait times. Additionally, we wanted to provide a solution for our peers and fellow travelers to efficiently plan vacations across the border without dealing with unforeseen wait times.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sbains2/datathon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sbains2/datathon/issues"
+  },
+  "homepage": "https://github.com/sbains2/datathon#readme",
+  "dependencies": {
+    "chart.js": "^4.4.3",
+    "d3": "^7.9.0",
+    "mapbox-gl": "^3.3.0"
+  }
+}
