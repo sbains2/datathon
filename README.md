@@ -3,16 +3,27 @@
 
 The goal of our project this weekend was to analyze the effect of COVID-19 on inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border. We wanted to analyze the efficiency and volume of traffic at each entry port, looking for various factors affecting long wait times. Additionally, we wanted to provide a solution for our peers and fellow travelers to efficiently plan vacations across the border without dealing with unforeseen wait times. 
 
-Initially to understand the data we conducted a descriptive analysis of our dataset after splitting it into two categories: Mexican borders and Canadian borders. This helped us narrow down each port and understand their traffic movements for their respective regions. Another factor we decided to include in our analysis is seasonal weather. We classified each month as a fall, spring, summer, or winter month. This showed us that from spring to the fall seasons the Canadian border has the most inbound traffic while, the Mexico border has constant high-volume traffic throughout every season. (Refer to visualization below)
+Initially to understand the data we conducted a descriptive analysis of our dataset after splitting it into two categories: Mexican borders and Canadian borders. This helped us narrow down each port and understand their traffic movements for their respective regions. Another factor we decided to include in our analysis is seasonal weather. We classified each month as a fall, spring, summer, or winter month. This showed us that from spring to the fall seasons the Canadian border has the most inbound traffic while, the Mexico border has constant high-volume traffic throughout every season. (Refer to visualization below 1.1). This could mean that the Mexican border consistently encounters high volumes of traffic causing longer wait times. Surprisingly enough Canada experienced an all-time low during the COVID-19 pandemic, but Mexico still encountered consistent inbound traffic.
 
 
-          <Viz>
+          <Viz 1.1>
+
+After noticing such a discrepancy, we still were curious about the highly consistent trends of inbound traffic so we decided to further break down our two data of inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border into 3 new categories:
+1. Distribution of inbound traffic for each port per year
+
+   
+           <Viz Canada 1.2.1> <Viz Mexico 1.2.2> 
+3. Distribution of traffic per year at the Mexican border
+          <Viz Canada 1.3.1> <Viz Mexico 1.3.2> 
+4. Distribution of inbound traffic per state
+          <Viz Canada 1.4.1> <Viz Mexico 1.4.2> 
 
 
-
+   
 ## Data Metrics (Data Analysis)
 
-To create an accurate measurement of the traffic at each port at the borders, we decided to normalize the data points and compute an aggregated score.
+To create an accurate measurement of the traffic at each port at the borders, we decided to normalize the data points and compute an aggregated score, ranking each port based on the busiest port. To do so we created the following metric that encompassed the majority of the factors affecting border wait times.
+
 Step 1: We normalized each measure on a scale of 0-1 by dividing by the maximum value of that value across all ports. 
 
           Normalized Measure = Max Measure Value/Measure Value
@@ -24,12 +35,18 @@ Step 1: We normalized each measure on a scale of 0-1 by dividing by the maximum 
 Step 2: We decided to assign a weight to each normalized measure. We assigned the weights based on the time taken to cross the border.
 
           weights = {
-              'Bus Passengers': 0.1,
-              'Buses': 1,
+              'Bus Passengers': 0.1,	
+              'Buses': 2,	
               'Pedestrians': 0.1,
-              'Trains': 0.5,
-              'Trucks': 0.5,
-              'Personal Vehicle': 0.3
+              'Personal Vehicle Passengers': 0.1,
+              'Personal Vehicles': 1,	
+              'Rail Containers Empty': 0.2,
+              'Rail Containers Loaded': 1,
+              'Train Passengers': 0.1,
+              'Trains': 2,
+              'Truck Containers Empty': 0.2,
+              'Truck Containers Loaded': 1,
+              'Trucks': 2
           }
 ​
 Step 3: After assigning weights to each variable and normalizing measures, we calculated the composite score by summing the weighted normalized measures.
@@ -44,74 +61,23 @@ Step 3: After assigning weights to each variable and normalizing measures, we ca
 ​
 Step 4: Now that the composite metric has been created, all we had to do was rank the ports
 
-
-
-
-
-
-
-
-
-
-Code:
-import pandas as pd
-
-# Read data from CSV file
-input_file = 'Border_Crossing_Entry_Data.csv'
-df = pd.read_csv(input_file)
-
-# Convert 'Date' to datetime and extract 'Year'
-df['Date'] = pd.to_datetime(df['Date'], format='%b %Y')
-df['Year'] = df['Date'].dt.year
-
-# Calculate total traffic for each port
-total_traffic = df.groupby('Port Name')['Value'].sum().reset_index()
-total_traffic.columns = ['Port Name', 'Total Traffic']
-
-# Calculate traffic by measure
-measure_traffic = df.groupby(['Port Name', 'Measure'])['Value'].sum().reset_index()
-measure_traffic_pivot = measure_traffic.pivot(index='Port Name', columns='Measure', values='Value').fillna(0).reset_index()
-
-# Normalize measures
-for measure in measure_traffic_pivot.columns[1:]:
-    measure_traffic_pivot[measure] = measure_traffic_pivot[measure] / measure_traffic_pivot[measure].max()
-
-# Assign weights
-weights = {
-    'Bus Passengers': 0.1,	
-    'Buses': 2,	
-    'Pedestrians': 0.1,
-    'Personal Vehicle Passengers': 0.1,
-    'Personal Vehicles': 1,	
-    'Rail Containers Empty': 0.2,
-    'Rail Containers Loaded': 1,
-    'Train Passengers': 0.1,
-    'Trains': 2,
-    'Truck Containers Empty': 0.2,
-    'Truck Containers Loaded': 1,
-    'Trucks': 2
-}
-
-# Calculate composite metric
-measure_traffic_pivot['Composite Metric'] = sum(
-    weights[measure] * measure_traffic_pivot[measure] for measure in weights
-)
-
-# Merge total traffic
-port_metrics = measure_traffic_pivot.merge(total_traffic, on='Port Name', how='left')
-
-# Rank ports based on the composite metric
-port_metrics['Rank'] = port_metrics['Composite Metric'].rank(ascending=False)
-port_metrics = port_metrics.sort_values('Rank')
-
-# Save to CSV
-port_metrics.to_csv('port_rankings.csv', index=False)
-
-print("Port rankings based on the composite metric have been calculated and saved to a CSV file successfully.")
-port_metrics
-
-          # Rank ports based on the composite metric
           port_metrics['Rank'] = port_metrics['Composite Metric'].rank(ascending=False)
           port_metrics = port_metrics.sort_values('Rank')
- 
+
+
+Outcome:
+This metric not only helped us understand the busiest ports during a certain time of the year but also helped us create a machine-learning model recommendation system, providing individuals entering the US with optimized information regarding which is the best port to use based on the date of travel. Our algorithm created above to compute the composite metric showed to have an 85% feature importance on predicting recommended ports for users.
+
+<img width="886" alt="Screenshot 2024-05-19 at 9 36 11 AM" src="https://github.com/sbains2/datathon/assets/67097552/c79f0cea-5189-4d49-adc6-a1ef7bbafde2">
+
+With the new composite metric having such an effect on the prediction values, we decided to rank each port from most busiest to least, using composite metric. We were able to implement this ranking system on our map visualization showing the top 20 locations that are the busiest that are recommended to avoid. While this may not seem like much, from this composite score we can infer:
+- Ports with higher ranks might need to allocate more resources, infrastructure, and staffing to handle high traffic.
+- By identifying the busiest ports, officials can optimize operations at these locations.
+- Ports with the busiest wait time can strategically plan for future investments and expansion projects.
+- The ranks highlight whether traffic is concentrated in a few major ports or more evenly distributed across several ports, helping guide policies to balance traffic loads and avoid bottlenecks.
+- Critical ports that need robust emergency and contingency planning.
+
+  Link to map: https://public.tableau.com/app/profile/sahil.bains/viz/MeasuringDensityAmongTop20RankedBusiestBorderCrossings/Sheet2
+  
+
 
