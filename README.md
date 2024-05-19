@@ -26,16 +26,21 @@ _**Link to boxplot graph:**_ https://public.tableau.com/app/profile/anirit.bansa
 In summary, analyzing inbound traffic between the Canadian and Mexican Borders across three periods (2017-2019, 2020-2021, 2022-2024) reveals a pattern potentially linked to the Covid-19 pandemic. The spread of traffic volume, indicating seasonal variations, was significantly wider for the Mexican Border across all periods (Mexican Border spread: 1,028,000 vs. Canadian Border spread: 960,000 in 2017-2019). Notably, both borders experienced a tightening of this spread during the Covid period (2020-2021), with medians around 1,621,000 (Mexico) and 1,387,000 (Canada), suggesting a more consistent flow of traffic likely due to travel restrictions. While the most recent period (2022-2024) shows some recovery in spread and medians, they haven't reached pre-pandemic levels, indicating lingering effects or a new normal for border traffic. Additionally, another important note regarding the high upticks during certain seasons, are caused due to seasonal activities which is supported by our data. Mexico being the hub of spring break and summer vacations, we noticed consistently high volumes at ports along this border, while the Canadian border saw consistent high volume traffic during the winter season as they are known for winter sports and weather. 
 
 
-After noticing such a unique spread, we still were curious about the highly consistent trends of inbound traffic so we decided to further break down our two data of inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border into 3 new categories:
-1. Distribution of inbound traffic for each port per year
+After noticing such a unique spread, we still were curious about the highly consistent trends of inbound traffic so we decided to further break down our two data of inbound traffic crossings between the U.S.-Canada and the U.S.-Mexico border into 2 new categories:
+1. Distribution of inbound traffic for top 10 ports from 2017-2024
+<img width="1485" alt="Screenshot 2024-05-19 at 12 39 04 PM" src="https://github.com/sbains2/datathon/assets/67097552/850c0d21-bb44-4073-a823-4e7b8d284d64">
+
+The boxplot analysis of the top 10 busiest ports from 2017-2024 highlights significant variations in inbound traffic volumes. The effects of the COVID-19 pandemic are clearly visible, with a marked decrease in traffic during 2020. Ports such as San Ysidro and Buffalo Niagara Falls see the highest volumes, but also the greatest variability. The consistent yet lower traffic at ports like Hidalgo and Ysleta suggests different usage patterns, possibly more localized or essential travel. Understanding these trends can help in optimizing resource allocation and planning for future infrastructure needs at these key ports.
+
+This analysis provides a foundational understanding of border traffic dynamics, aiding travelers in planning their trips and authorities in managing and improving port efficiency. Further analysis could include more recent data to assess the recovery trajectory post-pandemic.
 
    
-           <Viz Canada 1.2.1> <Viz Mexico 1.2.2> 
-3. Distribution of traffic per year at the Mexican border
-          <Viz Canada 1.3.1> <Viz Mexico 1.3.2> 
+        
 4. Distribution of inbound traffic per state
-          <Viz Canada 1.4.1> <Viz Mexico 1.4.2> 
+          
+<img width="1442" alt="Screenshot 2024-05-19 at 12 41 17 PM" src="https://github.com/sbains2/datathon/assets/67097552/9196f6f3-0c9d-4707-9794-dc540aaf91ce">
 
+California and Texas have the highest average inbound traffic, indicating heavy movement across these states. Michigan and New York are the primary entry points for inbound traffic from Canada. States like California, Texas, Michigan, and New York might need more resources to manage the high volume of inbound traffic effectively. Differentiated strategies may be required to manage traffic based on whether it is coming from the US-Canada or US-Mexico border, given the varying levels of traffic across states. As shown in our data, traffic was managed well when there were low volumes of traffic. These insights can help border control authorities and policymakers optimize resource allocation and infrastructure planning to handle the varying levels of inbound traffic efficiently.
 
    
 ## Data Metrics (Data Analysis)
