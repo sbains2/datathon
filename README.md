@@ -7,12 +7,20 @@ _**Link to boxplot graph:**_ https://public.tableau.com/app/profile/anirit.bansa
 
 <p align="center">
    <img width="300" alt="Screenshot 2024-05-19 at 11 14 39 AM" src="https://github.com/sbains2/datathon/assets/67097552/e457614a-1e14-4a75-8e99-9b0a0eee1484">
+   <br>
+   Label for Image 1
+   <br><br>
    <img width="300" alt="Screenshot 2024-05-19 at 11 20 15 AM" src="https://github.com/sbains2/datathon/assets/67097552/e4fdc872-d9b1-409f-823b-a40ae569057c">
+   <br>
+   Label for Image 2
+   <br><br>
    <img width="300" alt="Screenshot 2024-05-19 at 11 08 01 AM" src="https://github.com/sbains2/datathon/assets/67097552/81f926db-76aa-4b0b-aed2-3a24b0028ac4">
+   <br>
+   Label for Image 3
 </p>
 
 **Mexican Border:** 
-- 2017-2019: The median inbound traffic is around 1,917,000 with a spread ranging from approximately 1,442,000 to 2,470,000. There are outliers on both the higher and lower ends, suggesting occasional spikes and dips in traffic volume.
+- 2017-2019 (Figure 1): The median inbound traffic is around 1,917,000 with a spread ranging from approximately 1,442,000 to 2,470,000. There are outliers on both the higher and lower ends, suggesting occasional spikes and dips in traffic volume.
 - 2020-2021: The median inbound traffic is around 1,621,000 with a spread ranging from approximately 1,315,000 to 1,917,000. The spread and the median have both decreased compared to the previous period, suggesting a more inconsistent flow of traffic. There are outliers on both ends, but less frequent than in the first period.
 - 2022-2024: The median inbound traffic is around 1,827,000 with a spread ranging from approximately 1,500,000 to 2,144,000. The spread and median show some recovery compared to the Covid period but haven't reached the levels seen in 2017-2019. There are outliers on both ends, similar to the first period. Even if the same levels were reached, our data did not reflect such.
 
