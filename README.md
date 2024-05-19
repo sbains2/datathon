@@ -83,9 +83,7 @@ Note: These weights were assumptions made by us factoring time taken to cross th
 ​
 Step 3: After assigning weights to each variable and normalizing measures, we calculated the composite score by summing the weighted normalized measures.
 
-          $$
           \sum_{i=1}^{n} w_{i} \times \text{Normalized Measure}_{i}
-          $$
           
           measure_traffic_pivot['Composite Metric'] = sum(
               weights[measure] * measure_traffic_pivot[measure] for measure in weights
