@@ -361,7 +361,6 @@ document.getElementById('clearButton').addEventListener('click', function () {
 
 
 
-
 function generateChart(portName, portRank, portDensity) {
     if (chartInstance) {
         chartInstance.destroy();
@@ -394,10 +393,28 @@ function generateChart(portName, portRank, portDensity) {
                 y: {
                     beginAtZero: true
                 }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.dataset.label || '';
+
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y.toFixed(5); // Adjust decimal places here
+                            }
+                            return label;
+                        }
+                    }
+                }
             }
         }
     });
 }
+
 </script>
 </body>
 </html>
