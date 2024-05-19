@@ -65,7 +65,7 @@ Step 4: Now that the composite metric has been created, all we had to do was ran
           port_metrics = port_metrics.sort_values('Rank')
 
 
-Outcome:
+### Outcome:
 This metric not only helped us understand the busiest ports during a certain time of the year but also helped us create a machine-learning model recommendation system, providing individuals entering the US with optimized information regarding which is the best port to use based on the date of travel. Our algorithm created above to compute the composite metric showed to have an 85% feature importance on predicting recommended ports for users.
 
 <img width="886" alt="Screenshot 2024-05-19 at 9 36 11 AM" src="https://github.com/sbains2/datathon/assets/67097552/c79f0cea-5189-4d49-adc6-a1ef7bbafde2">
